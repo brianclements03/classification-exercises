@@ -19,7 +19,7 @@ def clean_data(df):
     '''
     
     df = df.drop_duplicates()
-    cols_to_drop = ['deck', 'embarked', 'class', 'age']
+    cols_to_drop = ['deck', 'embarked', 'class']
     df = df.drop(columns = cols_to_drop)
     df['embark_town'] = df.embark_town.fillna(value='Southampton')
     dummy_df = pd.get_dummies(df[['sex', 'embark_town']], dummy_na=False, drop_first=[True,True])

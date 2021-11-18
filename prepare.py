@@ -22,6 +22,7 @@ def clean_data(df):
     cols_to_drop = ['deck', 'embarked', 'class']
     df = df.drop(columns = cols_to_drop)
     df['embark_town'] = df.embark_town.fillna(value='Southampton')
+    df['baseline_prediction'] = 0
     dummy_df = pd.get_dummies(df[['sex', 'embark_town']], dummy_na=False, drop_first=[True,True])
     df = pd.concat([df, dummy_df], axis = 1)
     return df

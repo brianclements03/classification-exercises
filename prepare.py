@@ -13,7 +13,7 @@ warnings.filterwarnings("ignore")
 # import our own acquire module
 import acquire
 
-def clean_data(df):
+def clean_titanic_data(df):
     '''
     This function will clean the data etc etc...
     '''
@@ -27,7 +27,7 @@ def clean_data(df):
     df = pd.concat([df, dummy_df], axis = 1)
     return df
 
-def split_data(df):
+def split_titanic_data(df):
     '''
     Takes in a dataframe and returns train, validate, test sbusert dataframes
     '''
@@ -47,12 +47,36 @@ def impute_mode(train, validate, test):
     test[['embark_town']] = imputer.transform(test[['embark_town']])
     return train, validate, test
 
+def impute_mean_age(train, validate, test):
+    '''
+    This function imputes the mean of the age column for
+    observations with missing values.
+    Returns transformed train, validate, and test df.
+    '''
+    # create the imputer object with mean strategy
+    imputer = SimpleImputer(strategy = 'mean')
+    
+    # fit on and transform age column in train
+    train['age'] = imputer.fit_transform(train[['age']])
+    
+    # transform age column in validate
+    validate['age'] = imputer.transform(validate[['age']])
+    
+    # transform age column in test
+    test['age'] = imputer.transform(test[['age']])
+    
+    return train, validate, test
+
 def prep_titanic_data(df):
     '''
-    the ultimate dishwasher
+    Combines the clean_titanic_data, split_titanic_data, and impute_mean_age functions.
     '''
-    df = clean_data(df)
-    train, validate, test = split_data(df)
+    df = clean_titanic_data(df)
+
+    train, validate, test = split_titanic_data(df)
+    
+    train, validate, test = impute_mean_age(train, validate, test)
+
     return train, validate, test
 
 
